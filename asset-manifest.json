@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/credit_calculator/static/css/main.7801d348.css",
+    "main.js": "/credit_calculator/static/js/main.df62b959.js",
+    "static/media/logo.webp": "/credit_calculator/static/media/logo.8e2bf54cfc8104f1d130.webp",
+    "index.html": "/credit_calculator/index.html",
+    "main.7801d348.css.map": "/credit_calculator/static/css/main.7801d348.css.map",
+    "main.df62b959.js.map": "/credit_calculator/static/js/main.df62b959.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.7801d348.css",
+    "static/js/main.df62b959.js"
+  ]
+}
