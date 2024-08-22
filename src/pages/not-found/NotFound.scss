@@ -1,0 +1,14 @@
+.not-found {
+  font-family: "Montserrat", sans-serif;
+  display: flex;
+  justify-content: center;
+  padding: 10%;
+
+  &-text {
+    font-size: 18px;
+
+    @media (max-width: 1070px) {
+      font-size: 16px;
+    }
+  }
+}
