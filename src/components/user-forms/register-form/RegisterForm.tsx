@@ -24,10 +24,16 @@ const RegisterForm: FC<IForms> = ({ slideMove, changeSlideMove }) => {
     setPassword(value);
   };
 
-  const handleEye = (): void => {
-    isOpenEye ? setPasType("text") : setPasType("password");
+  const handleEye = () => {
+    if (!isOpenEye) {
+      setPasType("text");
+      return setIsOpenEye(true);
+    }
 
-    setIsOpenEye((state) => !state);
+    if (isOpenEye) {
+      setPasType("password");
+      return setIsOpenEye(false);
+    }
   };
 
   const handleToBack = (): void => {

@@ -23,11 +23,16 @@ const AuthForm: FC<IForms> = ({ slideMove, changeSlideMove }) => {
   const handleChangePassword = (value: string): void => {
     setPassword(value);
   };
+  const handleEye = () => {
+    if (!isOpenEye) {
+      setPasType("text");
+      return setIsOpenEye(true);
+    }
 
-  const handleEye = (): void => {
-    isOpenEye ? setPasType("text") : setPasType("password");
-
-    setIsOpenEye((state) => !state);
+    if (isOpenEye) {
+      setPasType("password");
+      return setIsOpenEye(false);
+    }
   };
 
   const handleToBack = (): void => {

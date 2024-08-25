@@ -3,7 +3,11 @@ import { FC } from "react";
 import "./ForDeveloper.scss";
 
 const ForDeveloper: FC = () => {
-  return <section>ForDeveloper</section>;
+  return (
+    <section className="for-developer">
+      <h2>Для разработчиков</h2>
+    </section>
+  );
 };
 
 export default ForDeveloper;

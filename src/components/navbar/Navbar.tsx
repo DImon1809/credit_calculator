@@ -55,7 +55,7 @@ const Navbar: FC = () => {
   return (
     <nav className={isBorderNav || isGlobal ? "navbar border" : "navbar"}>
       <div className="navbar-content-wrapper">
-        <div className="logo-title">
+        <div className="logo-title" onClick={() => window.location.reload()}>
           <div className="logo-wrapper">
             <img src={logo} alt="#" />
           </div>
@@ -65,22 +65,28 @@ const Navbar: FC = () => {
         <div className={isOpenMenu ? "items-wrapper active" : "items-wrapper"}>
           <ul>
             <li className="nav-item" onClick={handleItem}>
-              <Link to="/developer">для разработчиков</Link>
-            </li>
-            <li className="nav-item" onClick={handleItem}>
-              <Link to="/">личный кабинет</Link>
+              <Link to="/">главная</Link>
             </li>
             <li
               className={isAuthAlert ? "nav-item alert" : "nav-item"}
               onClick={handleItem}
             >
-              <Link to="/functional">функционал</Link>
+              <Link to="/account">личный кабинет</Link>
+            </li>
+            <li className="nav-item" onClick={handleItem}>
+              <Link to="/developer">для разработчиков</Link>
             </li>
           </ul>
         </div>
 
         <div
-          className={isOpenMenu ? "burger active" : "burger"}
+          className={
+            isOpenMenu
+              ? "burger active"
+              : isAuthAlert
+              ? "burger alert"
+              : "burger"
+          }
           onClick={handleBurger}
         >
           <span className="center-line"></span>

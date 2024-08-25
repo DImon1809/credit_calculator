@@ -44,7 +44,7 @@ const FormInput: FC<IFormInput> = ({
 
       {isPassword ? (
         <div className="eye-wrapper" onClick={handleEye}>
-          {!isOpenEye ? <FiEye /> : <FiEyeOff />}
+          {isOpenEye ? <FiEye /> : <FiEyeOff />}
         </div>
       ) : (
         ""

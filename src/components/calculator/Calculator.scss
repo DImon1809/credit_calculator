@@ -2,27 +2,31 @@
   width: 800px;
   height: 400px;
   background-color: rgba(211, 211, 211, 0.3);
-  margin: 80px auto;
+  margin: 60px auto;
   border-radius: 12px;
   box-shadow: 0px 1px 2px 0px black;
-  font-family: "Montserrat", sans-serif;
   display: flex;
   animation: 0.5s 0s linear move-animate;
 
   @media (max-width: 1070px) {
     width: 600px;
-    height: 300px;
+    height: 340px;
+  }
+
+  @media (max-width: 900px) {
+    margin: 50px auto;
   }
 
   @media (max-width: 660px) {
     width: 400px;
-    height: 400px;
-    margin: 80px auto 40px;
+    height: 460px;
+    margin: 50px auto 40px;
     flex-direction: column;
   }
 
   @media (max-width: 440px) {
     width: 360px;
+    margin: 44px auto 40px;
   }
 
   @media (max-width: 390px) {
@@ -32,12 +36,15 @@
   .params-output-wrapper {
     width: 50%;
     height: 100%;
-    // background-color: #1580c3;
     background-color: var(--main-color);
     border-radius: 30% 12px 12px 30%;
     display: flex;
     align-items: center;
     justify-content: center;
+
+    @media (max-width: 1070px) {
+      width: 44%;
+    }
 
     @media (max-width: 660px) {
       width: 100%;
@@ -52,13 +59,14 @@
         height: 40px;
       }
 
-      h4 {
+      h3 {
         font-size: 18px;
         font-weight: 500;
         color: #fff;
 
         @media (max-width: 1070px) {
           font-size: 16px;
+          text-align: center;
         }
       }
     }
@@ -66,12 +74,12 @@
     .result-sum {
       text-align: center;
 
-      h3 {
+      h4 {
         font-size: 20px;
         color: #fff;
 
         @media (max-width: 1070px) {
-          font-size: 17px;
+          font-size: 16px;
         }
       }
     }
@@ -81,6 +89,10 @@
     width: 50%;
     height: 100%;
     padding-top: 16px;
+
+    @media (max-width: 1070px) {
+      width: 56%;
+    }
 
     @media (max-width: 660px) {
       width: 100%;
@@ -92,7 +104,7 @@
       width: 100%;
       text-align: center;
 
-      h1 {
+      h2 {
         font-size: 17px;
       }
     }
@@ -102,18 +114,70 @@
       height: 90%;
       display: flex;
       flex-direction: column;
-      gap: 60px;
+      gap: 20px;
 
-      @media (max-width: 1070px) {
-        gap: 40px;
+      // @media (max-width: 1070px) {
+      //   gap: 40px;
+      // }
+
+      .params {
+        display: flex;
+        flex-direction: column;
+        gap: 56px;
+
+        @media (max-width: 1070px) {
+          gap: 36px;
+        }
       }
 
-      .save-button {
-        width: 200px;
-        height: 36px;
+      .percent-wrapper {
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+
+        @media (max-width: 1070px) {
+          gap: 8px;
+        }
+
+        .percent-label {
+          font-size: 16px;
+
+          @media (max-width: 1070px) {
+            font-size: 14px;
+          }
+        }
+
+        .percent {
+          width: 80px;
+          height: 24px;
+          border: none;
+          outline: 0;
+          border-bottom: 2px solid var(--main-color);
+          background-color: transparent;
+
+          @media (max-width: 1070px) {
+            width: 50px;
+            font-size: 12px;
+          }
+        }
+      }
+
+      .calculator-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+
+        @media (max-width: 1070px) {
+          gap: 16px;
+        }
+      }
+
+      .calculator-button {
+        width: 160px;
+        height: 34px;
         // background-color: #1580c3;
         background-color: var(--main-color);
-        margin: 0 auto;
+        // margin: 0 auto;
         border-radius: 8px;
         display: flex;
         align-items: center;
@@ -124,7 +188,17 @@
         transition: all 0.3s ease;
 
         @media (max-width: 1070px) {
-          width: 180px;
+          width: 130px;
+          height: 30px;
+        }
+
+        @media (max-width: 660px) {
+          width: 150px;
+          height: 32px;
+        }
+
+        @media (max-width: 440px) {
+          width: 130px;
           height: 30px;
         }
 

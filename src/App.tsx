@@ -1,4 +1,4 @@
-import { FC } from "react";
+import React, { FC, Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -8,12 +8,18 @@ import { toggleOpenMenu, toggleWrapper } from "./store/features/gWrapperslice";
 import "./App.scss";
 
 import Navbar from "./components/navbar/Navbar";
-import ForDeveloper from "./pages/for-developer/ForDeveloper";
-import PersonalAccount from "./pages/personal-account/PersonalAccount";
-import FunctionalPage from "./pages/functional-page/FunctionalPage";
 import NotFound from "./pages/not-found/NotFound";
 
 import AlertWindow from "./alert-window/AlertWindow";
+import PageLoader from "./loaders/page-loader/PageLoader";
+
+const MainPage = React.lazy(() => import("./pages/main-page/MainPage"));
+const PersonalAccount = React.lazy(
+  () => import("./pages/personal-account/PersonalAccount")
+);
+const ForDeveloper = React.lazy(
+  () => import("./pages/for-developer/ForDeveloper")
+);
 
 const App: FC = () => {
   const dispatch = useDispatch();
@@ -33,10 +39,32 @@ const App: FC = () => {
         className={isGlobal ? "global-wrapper visible" : "global-wrapper"}
         onClick={handleglobal}
       ></div>
+
       <Routes>
-        <Route path="/" element={<PersonalAccount />} />
-        <Route path="/developer" element={<ForDeveloper />} />
-        <Route path="/functional" element={<FunctionalPage />} />
+        <Route
+          path="/"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <MainPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/developer"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <ForDeveloper />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/account"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <PersonalAccount />
+            </Suspense>
+          }
+        />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

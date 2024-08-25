@@ -2,8 +2,7 @@
   width: 98%;
   height: 98%;
   position: absolute;
-  // background-color: rgba(211, 211, 211, 0.3);
-  font-family: "Montserrat", sans-serif;
+  animation: 0.5s 0s linear move-animate;
   transition: transform 0.3s ease;
 
   &.left {
@@ -70,11 +69,27 @@
         font-size: 13px;
       }
 
+      @media (max-width: 600px) {
+        cursor: default;
+      }
+
       &:active {
         transform: translateY(-6px);
         opacity: 0.5;
         box-shadow: none;
       }
     }
+  }
+}
+
+@keyframes move-animate {
+  from {
+    transform: translateY(10px);
+    opacity: 0.5;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
   }
 }

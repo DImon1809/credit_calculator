@@ -33,8 +33,6 @@ const PaymentChart: FC = () => {
   const [xData, setXData] = useState<number[]>([]);
   const [yData, setYData] = useState<number[]>([]);
 
-  console.log(xData);
-
   const [yField, setYField] = useState<string>("payOfInter");
   const [fontSize, setFontSize] = useState<number>(14);
 
@@ -70,7 +68,7 @@ const PaymentChart: FC = () => {
           return gradient;
         },
         tension: 0.4,
-        pointRadius: 0,
+        pointRadius: 4,
       },
     ],
   };
@@ -165,7 +163,9 @@ const PaymentChart: FC = () => {
   return (
     <div className="payment-chart">
       <div className="select-wrapper">
-        <p>Вы можете выбрать поле по которому будет построен график: </p>
+        <label htmlFor="y-field" className="select-label">
+          Вы можете выбрать поле по которому будет построен график:{" "}
+        </label>
         <select
           name="y-field"
           id="y-field"
