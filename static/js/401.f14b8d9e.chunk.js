@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkclient=self.webpackChunkclient||[]).push([[401],{401:(e,s,c)=>{c.r(s),c.d(s,{default:()=>n});var l=c(579);const n=()=>(0,l.jsx)("section",{className:"for-developer",children:(0,l.jsx)("h2",{children:"\u0414\u043b\u044f \u0440\u0430\u0437\u0440\u0430\u0431\u043e\u0442\u0447\u0438\u043a\u043e\u0432"})})}}]);
+//# sourceMappingURL=401.f14b8d9e.chunk.js.map
