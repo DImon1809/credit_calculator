@@ -96,13 +96,20 @@
     top: 50%;
     transform: translateY(-20%);
 
-    P {
+    .range-value {
       color: var(--main-color);
       font-size: 16px;
       font-weight: 600;
+      background-color: transparent;
+      outline: 0;
+      border: none;
 
       @media (max-width: 1070px) {
         font-size: 14px;
+      }
+
+      &.alert {
+        color: red;
       }
     }
   }

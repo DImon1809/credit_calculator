@@ -1,11 +1,16 @@
 import {
   FC,
+  MouseEvent,
   ChangeEvent,
   useRef,
   Dispatch,
   SetStateAction,
   useState,
+  useEffect,
 } from "react";
+
+import { useDispatch } from "react-redux";
+import { toggleAlert } from "../../../store/features/alertSlice";
 
 import "./RangeInput.scss";
 
@@ -36,17 +41,186 @@ const RangeInput: FC<IRangeInput> = ({
   externalValue,
   setExternalValue,
 }) => {
+  const dispatch = useDispatch();
+
   const rangeRef = useRef<HTMLInputElement>(null);
 
   const [rangeValue, setRangeValue] = useState<number>(0);
+  const [isAlert, setIsAlert] = useState<boolean>(false);
 
-  const handleSumInput = (event: ChangeEvent<HTMLInputElement>) => {
+  const setCoordX = (coordX: number) => {
     if (rangeRef.current) {
-      let coordX: number = Number(event.target.value);
-
       rangeRef.current.style.background = `linear-gradient(90deg, #00aae6 ${coordX}%, #fff ${coordX}%)`;
 
-      setRangeValue(coordX);
+      return setRangeValue(coordX);
+    }
+  };
+
+  const skipRuble = (event: MouseEvent<HTMLInputElement>): void => {
+    const input = event.target as HTMLInputElement;
+    const startPosition = input.selectionStart || 0;
+
+    if (isDate) {
+      if (/^\d+\s*мес\./.test(input.value))
+        return input.setSelectionRange(
+          input.value.length - 5,
+          input.value.length - 5
+        );
+
+      let months = input.value
+        .split(" ")
+        .reduce<number>((acc, char, index, arr) => {
+          if (char === "месяцев") return (acc += Number(arr[index - 1]));
+
+          if (char === "год" || char === "года" || char === "лет")
+            acc += Number(arr[index - 1]) * 12;
+
+          return acc;
+        }, 0);
+
+      setExternalValue(`${months} мес.`);
+
+      if (externalValue) {
+        setTimeout(
+          () =>
+            input.setSelectionRange(
+              `${months} мес.`.length - 5,
+              `${months} мес.`.length - 5
+            ),
+          0
+        );
+
+        return;
+      }
+    }
+
+    if (!isDate) {
+      const needPosition = input.value.replace("₽", "");
+
+      if (startPosition && startPosition > needPosition.length)
+        input.setSelectionRange(
+          needPosition.length - 1,
+          needPosition.length - 1
+        );
+    }
+  };
+
+  const handleValueInput = (
+    event: ChangeEvent<HTMLInputElement>,
+    isRange: boolean
+  ) => {
+    if (!isRange) {
+      const input = event.target as HTMLInputElement;
+      const currentPosition = input.selectionStart || 0;
+
+      if (!isDate) {
+        let needPosition = event.target.value.replace(/₽/gi, "");
+
+        let currentValue: number;
+
+        let inputValue: string = needPosition
+          .split(" ")
+          .map((char) => char.trim())
+          .join("");
+
+        if (!/^[0-9]*$/.test(inputValue)) {
+          dispatch(
+            toggleAlert({
+              isAlert: true,
+              isAuthAlert: false,
+              alertText: "Вводите только числа!",
+            })
+          );
+
+          return setIsAlert(true);
+        }
+
+        currentValue = Number(inputValue);
+
+        let coordX =
+          currentValue <= 100000
+            ? 0
+            : currentValue > 40000000
+            ? 40000000
+            : Math.ceil(currentValue / 400000);
+
+        setCoordX(coordX);
+
+        const result = `${currentValue > 40000000 ? 40000000 : currentValue}`
+          .split("")
+          .reverse()
+          .map((char, id) => (id % 3 === 0 ? `${char} ` : char))
+          .reverse()
+          .join("");
+
+        setExternalValue(result + "₽");
+
+        if (currentPosition > needPosition.length)
+          return setTimeout(
+            () =>
+              input.setSelectionRange(
+                needPosition.length - 1,
+                needPosition.length - 1
+              ),
+            0
+          );
+
+        if (currentPosition < needPosition.length)
+          return setTimeout(
+            () => input.setSelectionRange(currentPosition, currentPosition),
+            0
+          );
+      }
+
+      if (isDate) {
+        if (
+          currentPosition === input.value.length ||
+          currentPosition === input.value.length - 4
+        )
+          return;
+
+        let inputValue: string = input.value.replace("мес.", "").trim();
+
+        inputValue = inputValue ? inputValue : "0";
+
+        if (!/^[0-9]*$/.test(inputValue)) {
+          dispatch(
+            toggleAlert({
+              isAlert: true,
+              isAuthAlert: false,
+              alertText: "Вводите только числа!",
+            })
+          );
+
+          return setIsAlert(true);
+        }
+
+        let currentValue: number = Number(inputValue);
+
+        let coordX =
+          Math.ceil(currentValue / 0.78) - 6 >= 100
+            ? 100
+            : Math.ceil(currentValue / 0.78) - 6;
+
+        setCoordX(coordX);
+
+        setExternalValue(`${currentValue > 84 ? 84 : currentValue} мес.`);
+
+        setTimeout(
+          () =>
+            input.setSelectionRange(
+              `${currentValue} мес.`.length - 5,
+              `${currentValue} мес.`.length - 5
+            ),
+          0
+        );
+      }
+    }
+
+    if (isRange) {
+      let coordX: number = Number(event.target.value);
+
+      setCoordX(coordX);
 
       if (!isDate) {
         const result: string = `${coordX === 0 ? 100000 : coordX * 400000}`
@@ -56,7 +230,7 @@ const RangeInput: FC<IRangeInput> = ({
           .reverse()
           .join("");
 
-        return setExternalValue(result + " ₽");
+        return setExternalValue(result + "₽");
       }
 
       if (isDate) {
@@ -85,6 +259,10 @@ const RangeInput: FC<IRangeInput> = ({
     }
   };
 
+  useEffect(() => {
+    if (rangeValue && isAlert) return setIsAlert(false);
+  }, [rangeValue]);
+
   return (
     <div className="range-input-wrapper">
       <input
@@ -95,12 +273,18 @@ const RangeInput: FC<IRangeInput> = ({
         min={min}
         max={max}
         value={rangeValue}
-        onChange={handleSumInput}
+        onChange={(event) => handleValueInput(event, true)}
         ref={rangeRef}
       />
       <label htmlFor={`range-input-${preId}`}>{rangeText}</label>
       <div className="value-wrapper">
-        <p>{externalValue}</p>
+        <input
+          type="text"
+          className={isAlert ? "range-value alert" : "range-value"}
+          value={externalValue}
+          onClick={skipRuble}
+          onChange={(event) => handleValueInput(event, false)}
+        />
       </div>
       <div className="input-points">
         <ul>

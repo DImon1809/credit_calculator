@@ -35,6 +35,7 @@ const PaymentChart: FC = () => {
 
   const [yField, setYField] = useState<string>("payOfInter");
   const [fontSize, setFontSize] = useState<number>(14);
+  const [pointRadius, setPointRadius] = useState<number>(4);
 
   const data = {
     labels: xData,
@@ -68,7 +69,7 @@ const PaymentChart: FC = () => {
           return gradient;
         },
         tension: 0.4,
-        pointRadius: 4,
+        pointRadius: pointRadius,
       },
     ],
   };
@@ -144,6 +145,7 @@ const PaymentChart: FC = () => {
 
       if (window.innerWidth < 440) {
         setFontSize(10);
+        setPointRadius(6);
       }
 
       if (window.innerWidth > 660) {
