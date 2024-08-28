@@ -1,29 +1,31 @@
 {
   "files": {
-    "main.css": "/credit_calculator/static/css/main.cab4ff65.css",
-    "main.js": "/credit_calculator/static/js/main.e0a461c7.js",
+    "main.css": "/credit_calculator/static/css/main.5a504418.css",
+    "main.js": "/credit_calculator/static/js/main.0876acf5.js",
     "static/css/452.ef1dbd43.chunk.css": "/credit_calculator/static/css/452.ef1dbd43.chunk.css",
     "static/js/452.dd1844a9.chunk.js": "/credit_calculator/static/js/452.dd1844a9.chunk.js",
-    "static/css/683.0627e539.chunk.css": "/credit_calculator/static/css/683.0627e539.chunk.css",
-    "static/js/683.49220e63.chunk.js": "/credit_calculator/static/js/683.49220e63.chunk.js",
+    "static/css/376.7e639233.chunk.css": "/credit_calculator/static/css/376.7e639233.chunk.css",
+    "static/js/376.8e4e9bd0.chunk.js": "/credit_calculator/static/js/376.8e4e9bd0.chunk.js",
     "static/css/401.31d6cfe0.chunk.css": "/credit_calculator/static/css/401.31d6cfe0.chunk.css",
     "static/js/401.f14b8d9e.chunk.js": "/credit_calculator/static/js/401.f14b8d9e.chunk.js",
     "static/js/772.c6357485.chunk.js": "/credit_calculator/static/js/772.c6357485.chunk.js",
     "static/js/58.75b1ee0b.chunk.js": "/credit_calculator/static/js/58.75b1ee0b.chunk.js",
     "static/media/logo.webp": "/credit_calculator/static/media/logo.8e2bf54cfc8104f1d130.webp",
+    "static/media/edit.webp": "/credit_calculator/static/media/edit.bf12b52c092b2fa90c75.webp",
     "index.html": "/credit_calculator/index.html",
-    "main.cab4ff65.css.map": "/credit_calculator/static/css/main.cab4ff65.css.map",
-    "main.e0a461c7.js.map": "/credit_calculator/static/js/main.e0a461c7.js.map",
+    "static/media/drop.webp": "/credit_calculator/static/media/drop.76af7dfa5a94f139a706.webp",
+    "main.5a504418.css.map": "/credit_calculator/static/css/main.5a504418.css.map",
+    "main.0876acf5.js.map": "/credit_calculator/static/js/main.0876acf5.js.map",
     "452.ef1dbd43.chunk.css.map": "/credit_calculator/static/css/452.ef1dbd43.chunk.css.map",
     "452.dd1844a9.chunk.js.map": "/credit_calculator/static/js/452.dd1844a9.chunk.js.map",
-    "683.0627e539.chunk.css.map": "/credit_calculator/static/css/683.0627e539.chunk.css.map",
-    "683.49220e63.chunk.js.map": "/credit_calculator/static/js/683.49220e63.chunk.js.map",
+    "376.7e639233.chunk.css.map": "/credit_calculator/static/css/376.7e639233.chunk.css.map",
+    "376.8e4e9bd0.chunk.js.map": "/credit_calculator/static/js/376.8e4e9bd0.chunk.js.map",
     "401.f14b8d9e.chunk.js.map": "/credit_calculator/static/js/401.f14b8d9e.chunk.js.map",
     "772.c6357485.chunk.js.map": "/credit_calculator/static/js/772.c6357485.chunk.js.map",
     "58.75b1ee0b.chunk.js.map": "/credit_calculator/static/js/58.75b1ee0b.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.cab4ff65.css",
-    "static/js/main.e0a461c7.js"
+    "static/css/main.5a504418.css",
+    "static/js/main.0876acf5.js"
   ]
 }
