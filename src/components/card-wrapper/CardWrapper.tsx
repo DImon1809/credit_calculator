@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useState, useEffect } from "react";
 
 import Card from "../card/Card";
 
@@ -28,6 +28,24 @@ const cards = [
 ];
 
 const CardWrapper: FC = () => {
+  const [smallSize, setSmallSize] = useState<boolean>(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 660) setSmallSize(true);
+
+      if (window.innerWidth > 660 && smallSize) setSmallSize(false);
+    };
+
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
     <div className={cards.length > 6 ? "card-wrapper long" : "card-wrapper"}>
       <div className="card-wrapper-left">
@@ -45,11 +63,8 @@ const CardWrapper: FC = () => {
               />
             );
           }
-        })}
-      </div>
-      <div className="card-wrapper-right">
-        {cards.map((card, index) => {
-          if (index % 2 !== 0) {
+
+          if (index % 2 !== 0 && smallSize) {
             return (
               <Card
                 key={index + 1}
@@ -69,6 +84,30 @@ const CardWrapper: FC = () => {
             );
           }
         })}
+      </div>
+      <div className="card-wrapper-right">
+        {!smallSize &&
+          cards.map((card, index) => {
+            if (index % 2 !== 0) {
+              return (
+                <Card
+                  key={index + 1}
+                  count={card.count}
+                  amount={card.amount}
+                  termInMonth={card.termInMonth}
+                  monthlyPayment={card.monthlyPayment}
+                  delay={
+                    index < 6
+                      ? index === 1
+                        ? 100
+                        : Math.ceil(index / 2) * 150
+                      : 0
+                  }
+                  isLeft={false}
+                />
+              );
+            }
+          })}
       </div>
     </div>
   );

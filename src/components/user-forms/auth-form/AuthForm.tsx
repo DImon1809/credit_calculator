@@ -2,9 +2,13 @@ import { FC, MouseEvent, useState, useEffect } from "react";
 
 import { useDispatch } from "react-redux";
 import { toggleAlert } from "../../../store/features/alertSlice";
-import { toggleUserData } from "../../../store/features/useSlice";
+import { toggleUserData } from "../../../store/features/userSlice";
+
+import { useLoginMutation } from "../../../store/services/endpoints/userApi";
 
 import { RootType } from "../../../store";
+
+import { handleError } from "../../../errorTypeGuard";
 
 import FormInput from "../../UI/form-input/FormInput";
 import FormButton from "../../UI/form-button/FormButton";
@@ -18,6 +22,9 @@ const tokenKey = "token";
 const AuthForm: FC<IForms> = ({ slideMove, changeSlideMove }) => {
   const dispatch = useDispatch();
 
+  const [triggerLogin, { isLoading, isError, error, isSuccess }] =
+    useLoginMutation();
+
   const [directionName, setDiractionName] = useState<string>("");
 
   const [email, setEmail] = useState<string>("");
@@ -25,6 +32,14 @@ const AuthForm: FC<IForms> = ({ slideMove, changeSlideMove }) => {
 
   const [isOpenEye, setIsOpenEye] = useState<boolean>(false);
   const [pasType, setPasType] = useState<string>("password");
+
+  const [alertEmail, setAlertEmail] = useState<boolean>(false);
+  const [alertPassword, setAlertPassword] = useState<boolean>(false);
+
+  const setAlertsInput = (alEmail: boolean, alPass: boolean): void => {
+    setAlertEmail(alEmail);
+    setAlertPassword(alPass);
+  };
 
   const handleChangeEmail = (value: string): void => {
     setEmail(value);
@@ -51,20 +66,27 @@ const AuthForm: FC<IForms> = ({ slideMove, changeSlideMove }) => {
     setPassword("");
     setIsOpenEye(false);
     setPasType("password");
+
+    return setAlertsInput(false, false);
   };
 
   const handleAuth = (): void => {
-    localStorage.setItem(tokenKey, "token");
+    if (!email.length || !password.length) {
+      !email.length && setAlertEmail(true);
+      !password.length && setAlertPassword(true);
 
-    dispatch(
-      toggleAlert({
-        isAlert: true,
-        alertText: "Вы авторизовались!",
-        isAuthAlert: false,
-      })
-    );
+      dispatch(
+        toggleAlert({
+          isAlert: true,
+          isAuthAlert: false,
+          alertText: "Все поля нужно заполнить!",
+        })
+      );
 
-    dispatch(toggleUserData(true));
+      return;
+    }
+
+    !isLoading && triggerLogin({ email, password });
   };
 
   useEffect(() => {
@@ -72,6 +94,39 @@ const AuthForm: FC<IForms> = ({ slideMove, changeSlideMove }) => {
 
     if (slideMove === "authorization") return setDiractionName("left");
   }, [slideMove]);
+
+  useEffect(() => {
+    if (error && !isSuccess) {
+      if (handleError(error)?.status === 401) {
+        dispatch(
+          toggleAlert({
+            isAlert: true,
+            alertText: "Неправильный логин или пароль!",
+            isAuthAlert: false,
+          })
+        );
+
+        setAlertsInput(true, true);
+      }
+    }
+
+    if (!error && isSuccess) {
+      dispatch(
+        toggleAlert({
+          isAlert: true,
+          alertText: "Вы авторизовались!",
+          isAuthAlert: false,
+        })
+      );
+
+      setEmail("");
+      setPassword("");
+    }
+  }, [isSuccess, isError, error]);
+
+  useEffect(() => {
+    if (alertEmail || alertPassword) setAlertsInput(false, false);
+  }, [email, password]);
 
   return (
     <div className={`auth-form-wrapper ${directionName}`}>
@@ -85,7 +140,8 @@ const AuthForm: FC<IForms> = ({ slideMove, changeSlideMove }) => {
           inputName="email"
           inputId="auth-email"
           inputValue={email}
-          inputText="Введите е-маил"
+          isAlert={alertEmail}
+          inputText="Введите email"
           setInputValue={handleChangeEmail}
         />
 
@@ -97,12 +153,17 @@ const AuthForm: FC<IForms> = ({ slideMove, changeSlideMove }) => {
           inputText="Введите пароль"
           isOpenEye={isOpenEye}
           isPassword={true}
+          isAlert={alertPassword}
           handleEye={handleEye}
           setInputValue={handleChangePassword}
         />
 
         <div className="buttons-wrapper">
-          <FormButton buttonText="авторизоваться" functionButton={handleAuth} />
+          <FormButton
+            isLoading={isLoading}
+            buttonText="авторизоваться"
+            functionButton={handleAuth}
+          />
           <FormButton buttonText="отмена" functionButton={handleToBack} />
         </div>
       </form>

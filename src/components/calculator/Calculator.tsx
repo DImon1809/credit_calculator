@@ -1,34 +1,114 @@
-import { FC, MouseEvent, useState, useEffect } from "react";
+import {
+  FC,
+  MouseEvent,
+  ChangeEvent,
+  useState,
+  useEffect,
+  Dispatch,
+  SetStateAction,
+} from "react";
 
 import { useDispatch } from "react-redux";
 import { toggleAlert } from "../../store/features/alertSlice";
+
+import { RootType } from "../../store";
+import { useSelector } from "react-redux";
+
+import { useCalculateMutation } from "../../store/services/endpoints/loanApi";
 
 import RangeInput from "../UI/range-input/RangeInput";
 
 import "./Calculator.scss";
 
-const Calculator: FC = () => {
+export interface ICalculator {
+  monthSum: string;
+  setMonthSum: Dispatch<SetStateAction<string>>;
+  isLoading: boolean;
+  handleCalculate: (
+    event: MouseEvent<HTMLDivElement>,
+    sumValue: string,
+    percent: string,
+    term: string
+  ) => void;
+}
+
+const Calculator: FC<ICalculator> = ({
+  handleCalculate,
+  isLoading,
+  monthSum,
+  setMonthSum,
+}) => {
   const dispatch = useDispatch();
+
+  const { isAuth } = useSelector((state: RootType) => state.userSlice);
 
   const [sumValue, setSumValue] = useState<string>("100 000 ₽");
   const [term, setTerm] = useState<string>("6 месяцев");
-  const [percent, setPercent] = useState<string>("13%");
+  const [percent, setPercent] = useState<string>("13 %");
 
   const [alertButton, setAlertButton] = useState<boolean>(false);
+  const [alertPercent, setAlertPercent] = useState<boolean>(false);
 
   const handleSaveButton = (event: MouseEvent<HTMLDivElement>): void => {
     event.preventDefault();
 
-    !alertButton &&
+    if (!isAuth) {
+      !alertButton &&
+        dispatch(
+          toggleAlert({
+            alertText: "Сначала необходимо зайти в личный кабинет!",
+            isAlert: true,
+            isAuthAlert: true,
+          })
+        );
+
+      setAlertButton(true);
+    }
+
+    if (isAuth) {
+    }
+  };
+
+  const handleBlur = () => {
+    const _num = Number(percent.replace(" %", ""));
+
+    _num < 1 && setPercent("1 %");
+
+    _num > 25 && setPercent("25 %");
+  };
+
+  const skipProcent = (event: MouseEvent<HTMLInputElement>) => {
+    const input = event.target as HTMLInputElement;
+    const startPosition = input.selectionStart || 0;
+    const needPosition = input.value.replace(" %", "").length;
+
+    if (startPosition > needPosition)
+      input.setSelectionRange(needPosition, needPosition);
+  };
+
+  const changeInputHandler = (event: ChangeEvent<HTMLInputElement>) => {
+    const input = event.target as HTMLInputElement;
+    const currentPercent = event.target.value.replace(" %", "");
+
+    if (!/^[0-9]*$/.test(currentPercent)) {
       dispatch(
         toggleAlert({
-          alertText: "Сначала необходимо зайти в личный кабинет!",
           isAlert: true,
-          isAuthAlert: true,
+          isAuthAlert: false,
+          alertText: "Вводите только числа!",
         })
       );
 
-    setAlertButton(true);
+      return setAlertPercent(true);
+    }
+
+    setPercent(currentPercent + " %");
+
+    setTimeout(
+      () =>
+        input.setSelectionRange(currentPercent.length, currentPercent.length),
+      0
+    );
   };
 
   useEffect(() => {
@@ -38,6 +118,10 @@ const Calculator: FC = () => {
       }, 2000);
     }
   }, [alertButton]);
+
+  useEffect(() => {
+    setAlertPercent(false);
+  }, [percent]);
 
   return (
     <div className="calculator-wrapper">
@@ -77,17 +161,15 @@ const Calculator: FC = () => {
               <label htmlFor="percent" className="percent-label">
                 Выберите годовую ставку{" "}
               </label>
-              <select
+              <input
                 name="percent"
                 id="percent"
-                className="percent"
+                className={alertPercent ? "percent alert" : "percent"}
                 value={percent}
-                onChange={(event) => setPercent(event.target.value)}
-              >
-                <option value="13">13%</option>
-                <option value="18">18%</option>
-                <option value="20">20%</option>
-              </select>
+                onClick={skipProcent}
+                onChange={changeInputHandler}
+                onBlur={handleBlur}
+              />
             </div>
           </div>
 
@@ -101,8 +183,17 @@ const Calculator: FC = () => {
               <p>сохранить</p>
             </div>
 
-            <div className="calculator-button">
-              <p>рассчитать</p>
+            <div
+              className="calculator-button"
+              onClick={(event) =>
+                handleCalculate(event, sumValue, percent, term)
+              }
+            >
+              {isLoading ? (
+                <span className="spinner"></span>
+              ) : (
+                <p>рассчитать</p>
+              )}
             </div>
           </div>
         </form>
@@ -113,7 +204,11 @@ const Calculator: FC = () => {
             <h3>Ежемесячный платеж составляет</h3>
           </div>
           <div className="result-sum">
-            <h4>120 000 ₽</h4>
+            {isLoading ? (
+              <span className="spinner-sum"></span>
+            ) : (
+              <h4>{monthSum}</h4>
+            )}
           </div>
         </div>
       </div>

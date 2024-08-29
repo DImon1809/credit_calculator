@@ -5,6 +5,7 @@
     width: 800px;
     margin: 40px auto;
     border-collapse: collapse;
+    display: block;
 
     @media (max-width: 1070px) {
       width: 600px;
@@ -19,6 +20,13 @@
     @media (max-width: 440px) {
       width: 340px;
       font-size: 11px;
+    }
+
+    .thead,
+    .tbody,
+    tr,
+    td {
+      display: block;
     }
 
     .thead {
@@ -37,12 +45,27 @@
       }
     }
 
+    .tbody {
+      max-height: 600px;
+      overflow-y: auto;
+
+      &.long {
+        overflow-y: scroll;
+      }
+    }
+
     tr {
       height: 40px;
+      display: flex;
 
       td {
+        flex: 1;
         text-align: center;
         border-bottom: 2px solid rgba(211, 211, 211, 0.3);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        // white-space: nowrap;
       }
     }
   }

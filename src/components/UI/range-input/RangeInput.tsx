@@ -48,6 +48,26 @@ const RangeInput: FC<IRangeInput> = ({
   const [rangeValue, setRangeValue] = useState<number>(0);
   const [isAlert, setIsAlert] = useState<boolean>(false);
 
+  const handleBlur = (isSum: boolean) => {
+    if (!isSum) {
+      let _current = Number(
+        externalValue.replace(" мес.", "").split(" ").join("")
+      );
+
+      _current < 6
+        ? setExternalValue("6 месяцев")
+        : setExternalValue(`${_current} месяцев`);
+    }
+
+    if (isSum) {
+      let _current = Number(
+        externalValue.replace(" ₽", "").split(" ").join("")
+      );
+
+      _current < 100000 && setExternalValue("100 000 ₽");
+    }
+  };
+
   const setCoordX = (coordX: number) => {
     if (rangeRef.current) {
       rangeRef.current.style.background = `linear-gradient(90deg, #00aae6 ${coordX}%, #fff ${coordX}%)`;
@@ -284,6 +304,7 @@ const RangeInput: FC<IRangeInput> = ({
           value={externalValue}
           onClick={skipRuble}
           onChange={(event) => handleValueInput(event, false)}
+          onBlur={() => handleBlur(isDate ? false : true)}
         />
       </div>
       <div className="input-points">

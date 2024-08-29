@@ -6,6 +6,10 @@ const ForDeveloper: FC = () => {
   return (
     <section className="for-developer">
       <h2>Для разработчиков</h2>
+      <iframe
+        title="gitbook"
+        src="https://shanty.gitbook.io/credit-tracker"
+      ></iframe>
     </section>
   );
 };

@@ -1,5 +1,12 @@
 import { FC, useState, useEffect } from "react";
 
+import {
+  toggleDeleteWind,
+  togglePayment,
+} from "../../store/features/alertSlice";
+import { useDispatch } from "react-redux";
+import { toggleWrapper } from "../../store/features/gWrapperslice";
+
 import edit from "../../assets/ui/edit.webp";
 import drop from "../../assets/ui/drop.webp";
 
@@ -22,6 +29,8 @@ const Card: FC<ICard> = ({
   delay,
   isLeft,
 }) => {
+  const dispatch = useDispatch();
+
   const [isMove, setIsMove] = useState<boolean>(false);
 
   useEffect(() => {
@@ -68,9 +77,22 @@ const Card: FC<ICard> = ({
 
       <div className="card-item-wrapper">
         <div className="card-edit">
-          <img src={edit} alt="#" />
+          <img
+            src={edit}
+            alt="#"
+            onClick={() => {
+              dispatch(toggleWrapper(true));
+              dispatch(togglePayment(true));
+            }}
+          />
         </div>
-        <div className="card-drop">
+        <div
+          className="card-drop"
+          onClick={() => {
+            dispatch(toggleWrapper(true));
+            dispatch(toggleDeleteWind(true));
+          }}
+        >
           <img src={drop} alt="#" />
         </div>
       </div>

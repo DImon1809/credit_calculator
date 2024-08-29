@@ -152,10 +152,6 @@
           font-size: 13px;
         }
 
-        @media (max-width: 600px) {
-          cursor: default;
-        }
-
         @media (max-width: 500px) {
           font-size: 12px;
         }
@@ -168,18 +164,22 @@
           text-decoration: none;
           color: #000;
           transition: all 0.3s ease;
+
+          @media (max-width: 600px) {
+            cursor: default;
+          }
         }
 
         @media (hover: hover) {
           &:hover a {
-            color: red;
-            filter: drop-shadow(2px 3px 2px red);
+            color: var(--main-color);
+            filter: drop-shadow(2px 3px 2px var(--main-color));
           }
         }
 
         &:active a {
-          color: red;
-          filter: drop-shadow(2px 3px 2px red);
+          color: var(--main-color);
+          filter: drop-shadow(2px 3px 2px var(--main-color));
         }
       }
 
@@ -210,14 +210,14 @@
 
         @media (hover: hover) {
           &:hover {
-            color: red;
-            filter: drop-shadow(2px 3px 2px red);
+            color: var(--main-color);
+            filter: drop-shadow(2px 3px 2px var(--main-color));
           }
         }
 
         &:active {
-          color: red;
-          filter: drop-shadow(2px 3px 2px red);
+          color: var(--main-color);
+          filter: drop-shadow(2px 3px 2px var(--main-color));
         }
       }
     }

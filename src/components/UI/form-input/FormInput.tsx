@@ -13,6 +13,7 @@ export interface IFormInput {
   inputText: string;
   isPassword?: boolean;
   isOpenEye?: boolean;
+  isAlert?: boolean;
   setInputValue: (value: string) => void;
   handleEye?: () => void;
 }
@@ -25,6 +26,7 @@ const FormInput: FC<IFormInput> = ({
   inputText,
   isPassword,
   isOpenEye,
+  isAlert,
   setInputValue,
   handleEye,
 }) => {
@@ -34,7 +36,15 @@ const FormInput: FC<IFormInput> = ({
         type={type}
         name={inputName}
         id={inputId}
-        className={isPassword ? "form-input is-password" : "form-input"}
+        className={
+          isPassword
+            ? isAlert
+              ? "form-input is-password alert"
+              : "form-input password"
+            : isAlert
+            ? "form-input alert"
+            : "form-input"
+        }
         placeholder=" "
         autoComplete="off"
         value={inputValue}

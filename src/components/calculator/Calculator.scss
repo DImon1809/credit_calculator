@@ -1,3 +1,12 @@
+@mixin SpinnerMixin($width, $height, $border) {
+  display: block;
+  width: $width;
+  height: $height;
+  border-radius: 50%;
+  border: $border dotted #fff;
+  animation: 2s infinite linear spinner-animate;
+}
+
 .calculator-wrapper {
   width: 800px;
   height: 400px;
@@ -72,7 +81,14 @@
     }
 
     .result-sum {
-      text-align: center;
+      // text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .spinner-sum {
+        @include SpinnerMixin(22px, 22px, 4px);
+      }
 
       h4 {
         font-size: 20px;
@@ -159,6 +175,10 @@
             width: 50px;
             font-size: 12px;
           }
+
+          &.alert {
+            border-bottom: 2px solid red;
+          }
         }
       }
 
@@ -231,6 +251,10 @@
             opacity: 0.5;
           }
         }
+
+        .spinner {
+          @include SpinnerMixin(16px, 16px, 2px);
+        }
       }
     }
   }
@@ -245,5 +269,15 @@
   to {
     transform: translateY(0);
     opacity: 1;
+  }
+}
+
+@keyframes spinner-animate {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
   }
 }

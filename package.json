@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "homepage": "https://dimon1809.github.io/credit_calculator",
   "private": true,
+  "proxy": "http://localhost:4000",
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.7",
     "@testing-library/jest-dom": "^5.17.0",

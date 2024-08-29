@@ -4,7 +4,13 @@ import "./PaymentSchedule.scss";
 
 import { testData } from "../../testData";
 
-const PaymentSchedule: FC = () => {
+import { IPayment } from "../../store/services/types";
+
+export interface IPaymentSchedule {
+  tableData: IPayment[];
+}
+
+const PaymentSchedule: FC<IPaymentSchedule> = ({ tableData }) => {
   return (
     <div className="payment-schedule">
       <table className="table">
@@ -18,16 +24,20 @@ const PaymentSchedule: FC = () => {
           </tr>
         </thead>
 
-        <tbody className="tbody">
-          {testData.map((row, index) => (
-            <tr key={index}>
-              <td>{index + 1}</td>
-              <td>{row.payOfInter}</td>
-              <td>{row.principal}</td>
-              <td>{row.perMonth}</td>
-              <td>{row.repayment}</td>
-            </tr>
-          ))}
+        <tbody className={tableData.length > 15 ? "tbody long" : "tbody"}>
+          {tableData.length ? (
+            tableData.map((row, index) => (
+              <tr key={index}>
+                <td>{index + 1}</td>
+                <td>{row.interest}</td>
+                <td>{row.paymentAmount}</td>
+                <td>{row.principal}</td>
+                <td>{row.remainingBalance}</td>
+              </tr>
+            ))
+          ) : (
+            <tr></tr>
+          )}
         </tbody>
       </table>
     </div>

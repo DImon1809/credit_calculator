@@ -4,10 +4,15 @@ import "./FormButton.scss";
 
 export interface IFormButton {
   buttonText: string;
+  isLoading?: boolean;
   functionButton?: () => void;
 }
 
-const FormButton: FC<IFormButton> = ({ buttonText, functionButton }) => {
+const FormButton: FC<IFormButton> = ({
+  buttonText,
+  isLoading,
+  functionButton,
+}) => {
   const handleClick = (event: MouseEvent<HTMLDivElement>) => {
     event.preventDefault();
 
@@ -16,7 +21,9 @@ const FormButton: FC<IFormButton> = ({ buttonText, functionButton }) => {
 
   return (
     <div className="form-button" onClick={handleClick}>
-      <p className="form-button-text">{buttonText}</p>
+      <p className="form-button-text">
+        {isLoading ? <span className="spinner"></span> : buttonText}
+      </p>
     </div>
   );
 };

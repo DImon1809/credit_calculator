@@ -1,9 +1,5 @@
 import { FC, useEffect, useState } from "react";
-
-import { testData } from "../testData";
-
 import "./PaymentChart.scss";
-
 import {
   Chart,
   CategoryScale,
@@ -15,8 +11,8 @@ import {
   Filler,
   Legend,
 } from "chart.js";
-
 import { Line } from "react-chartjs-2";
+import { IPayment } from "../store/services/types";
 
 Chart.register(
   CategoryScale,
@@ -29,11 +25,15 @@ Chart.register(
   Legend
 );
 
-const PaymentChart: FC = () => {
+export interface IPaymentChart {
+  chartData: IPayment[];
+}
+
+const PaymentChart: FC<IPaymentChart> = ({ chartData }) => {
   const [xData, setXData] = useState<number[]>([]);
   const [yData, setYData] = useState<number[]>([]);
 
-  const [yField, setYField] = useState<string>("payOfInter");
+  const [yField, setYField] = useState<string>("interest");
   const [fontSize, setFontSize] = useState<number>(14);
   const [pointRadius, setPointRadius] = useState<number>(4);
 
@@ -45,7 +45,6 @@ const PaymentChart: FC = () => {
         data: yData,
         fill: true,
         borderWidth: 2,
-        // borderColor: "rgba(21, 128, 195, 0.9)",
         borderColor: "rgba(0, 170, 230,0.9)",
         backgroundColor: (context: any) => {
           const chart = context.chart;
@@ -89,16 +88,13 @@ const PaymentChart: FC = () => {
             size: fontSize,
           },
         },
-
         border: {
           color: "rgba(0, 170, 230,1)",
         },
-
         grid: {
           color: "rgba(0, 170, 230,0.1)",
         },
       },
-
       y: {
         ticks: {
           autoSkip: true,
@@ -107,11 +103,9 @@ const PaymentChart: FC = () => {
             size: fontSize,
           },
         },
-
         border: {
           color: "rgba(0, 170, 230,1)",
         },
-
         grid: {
           color: "rgba(0, 170, 230,0.1)",
         },
@@ -120,22 +114,24 @@ const PaymentChart: FC = () => {
   };
 
   useEffect(() => {
-    if (yField) {
-      let _xData = [];
-      let _yData = [];
+    if (yField && chartData) {
+      let _xData: number[] = [];
+      let _yData: number[] = [];
 
-      for (let i = 0; i < testData.length; i++) {
-        _xData.push(Number(i) + 1);
+      for (let i = 0; i < chartData.length; i++) {
+        _xData.push(i + 1);
 
-        let y = Number(testData[i][yField].replace(/\s|₽/gi, ""));
+        let y = chartData[i][yField];
 
-        _yData.push(y);
+        if (typeof y === "number") {
+          _yData.push(y);
+        }
       }
 
       setXData(_xData);
       setYData(_yData);
     }
-  }, [yField]);
+  }, [yField, chartData]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -175,10 +171,10 @@ const PaymentChart: FC = () => {
           value={yField}
           onChange={(event) => setYField(event.target.value)}
         >
-          <option value="payOfInter">Оплата процентов</option>
-          <option value="principal">Основной долг</option>
-          <option value="perMonth">Платеж в месяц</option>
-          <option value="repayment">Остаток погашения</option>
+          <option value="interest">Оплата процентов</option>
+          <option value="paymentAmount">Основной долг</option>
+          <option value="principal">Платеж в месяц</option>
+          <option value="remainingBalance">Остаток погашения</option>
         </select>
       </div>
       <div className="line-chart-wrapper">

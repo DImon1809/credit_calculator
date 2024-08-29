@@ -1,8 +1,8 @@
 import { FC, useEffect } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
-import { RootType } from "../store";
-import { toggleAlert } from "../store/features/alertSlice";
+import { RootType } from "../../store";
+import { toggleAlert } from "../../store/features/alertSlice";
 
 import "./AlertWindow.scss";
 

@@ -10,8 +10,8 @@ const initialState: Iinitialstate = {
   isActiveSum: false,
 };
 
-export const gWrapperSlice = createSlice({
-  name: "alertSlice",
+export const inputSlice = createSlice({
+  name: "inputSlice",
   initialState,
   reducers: {
     toggleTermActive: (state, action: PayloadAction<boolean>) => {
@@ -24,5 +24,5 @@ export const gWrapperSlice = createSlice({
   },
 });
 
-export const { toggleTermActive, toggleSumActive } = gWrapperSlice.actions;
-export const gWrapperSliceReducer = gWrapperSlice.reducer;
+export const { toggleTermActive, toggleSumActive } = inputSlice.actions;
+export const inputSliceReducer = inputSlice.reducer;

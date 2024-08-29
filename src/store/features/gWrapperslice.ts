@@ -11,7 +11,7 @@ const initialState: Iinitialstate = {
 };
 
 export const gWrapperSlice = createSlice({
-  name: "alertSlice",
+  name: "gWrapperSlice",
   initialState,
   reducers: {
     toggleWrapper: (state, action: PayloadAction<boolean>) => {

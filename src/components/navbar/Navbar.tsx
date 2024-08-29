@@ -9,7 +9,12 @@ import {
   toggleOpenMenu,
 } from "../../store/features/gWrapperslice";
 
-import { toggleUserData } from "../../store/features/useSlice";
+import {
+  toggleDeleteWind,
+  togglePayment,
+} from "../../store/features/alertSlice";
+
+import { logout } from "../../store/features/userSlice";
 import { toggleAlert } from "../../store/features/alertSlice";
 
 import "./Navbar.scss";
@@ -19,6 +24,9 @@ import logo from "../../assets/logo.webp";
 const Navbar: FC = () => {
   const dispatch = useDispatch();
 
+  const { isDeleteWind, isPayment } = useSelector(
+    (state: RootType) => state.alertSlice
+  );
   const { isAuthAlert } = useSelector((state: RootType) => state.alertSlice);
   const { isGlobal, isOpenMenu } = useSelector(
     (state: RootType) => state.gWrapperSlice
@@ -37,23 +45,29 @@ const Navbar: FC = () => {
     if (!isOpenMenu) {
       dispatch(toggleWrapper(true));
       dispatch(toggleOpenMenu(true));
+      isDeleteWind && dispatch(toggleDeleteWind(false));
+      isPayment && dispatch(togglePayment(false));
     }
 
     if (isOpenMenu) {
       dispatch(toggleWrapper(false));
       dispatch(toggleOpenMenu(false));
+      isDeleteWind && dispatch(toggleDeleteWind(false));
+      isPayment && dispatch(togglePayment(false));
     }
   };
 
   const handleItem = () => {
     isGlobal && dispatch(toggleWrapper(false));
     isOpenMenu && dispatch(toggleOpenMenu(false));
+    isDeleteWind && dispatch(toggleDeleteWind(false));
+    isPayment && dispatch(togglePayment(false));
   };
 
   const handleLogOut = (): void => {
     localStorage.removeItem("token");
 
-    dispatch(toggleUserData(false));
+    dispatch(logout());
     dispatch(
       toggleAlert({ isAlert: true, alertText: "Вы вышли!", isAuthAlert: false })
     );
@@ -89,7 +103,12 @@ const Navbar: FC = () => {
               <Link to="/account">личный кабинет</Link>
             </li>
             <li className="nav-item" onClick={handleItem}>
-              <Link to="/developer">для разработчиков</Link>
+              <a
+                href="https://shanty.gitbook.io/credit-tracker"
+                target="_blanck"
+              >
+                для разработчиков
+              </a>
             </li>
             {isAuth ? (
               <li className="nav-item-logout" onClick={handleLogOut}>

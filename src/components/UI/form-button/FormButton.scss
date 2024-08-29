@@ -35,4 +35,23 @@
       font-size: 14px;
     }
   }
+
+  .spinner {
+    display: block;
+    width: 19px;
+    height: 19px;
+    border-radius: 50%;
+    border: 2px dotted #fff;
+    animation: 2s infinite linear spinner-animate;
+  }
+}
+
+@keyframes spinner-animate {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }

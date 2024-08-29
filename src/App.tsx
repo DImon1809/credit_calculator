@@ -4,14 +4,17 @@ import { Route, Routes } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { RootType } from "./store";
 import { toggleOpenMenu, toggleWrapper } from "./store/features/gWrapperslice";
-import { toggleUserData } from "./store/features/useSlice";
+import { toggleUserData } from "./store/features/userSlice";
+import { toggleDeleteWind, togglePayment } from "./store/features/alertSlice";
 
 import "./App.scss";
 
 import Navbar from "./components/navbar/Navbar";
 import NotFound from "./pages/not-found/NotFound";
+import ConfigWindow from "./alerts/config-window/ConfigWindow";
+import MakePayment from "./alerts/make-payment/MakePayment";
 
-import AlertWindow from "./alert-window/AlertWindow";
+import AlertWindow from "./alerts/alert-window/AlertWindow";
 import PageLoader from "./loaders/page-loader/PageLoader";
 
 const MainPage = React.lazy(() => import("./pages/main-page/MainPage"));
@@ -30,16 +33,26 @@ const App: FC = () => {
   const handleglobal = (): void => {
     dispatch(toggleWrapper(false));
     dispatch(toggleOpenMenu(false));
+    dispatch(toggleDeleteWind(false));
+    dispatch(togglePayment(false));
   };
 
   useEffect(() => {
-    if (localStorage.getItem("token")) dispatch(toggleUserData(true));
+    if (localStorage.getItem("token"))
+      dispatch(
+        toggleUserData({
+          jwtToken: localStorage.getItem("token") || "",
+          isAuth: true,
+        })
+      );
   }, []);
 
   return (
     <>
       <Navbar />
       <AlertWindow />
+      <ConfigWindow />
+      <MakePayment />
       <div
         className={isGlobal ? "global-wrapper visible" : "global-wrapper"}
         onClick={handleglobal}
