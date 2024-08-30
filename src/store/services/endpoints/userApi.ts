@@ -24,7 +24,10 @@ export const userApi = serviceApi.injectEndpoints({
       }),
     }),
 
-    login: builder.mutation<any, { email: string; password: string }>({
+    login: builder.mutation<
+      { token: string },
+      { email: string; password: string }
+    >({
       query: (user) => ({
         url: "/team21/api/v1/auth/authenticate",
         method: "post",

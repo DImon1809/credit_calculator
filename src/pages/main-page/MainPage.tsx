@@ -1,10 +1,12 @@
-import { FC, MouseEvent, useEffect, useState } from "react";
+import { FC, MouseEvent, useEffect, useState, useRef, memo } from "react";
 
+import { useNavigate, useLocation } from "react-router-dom";
 import { useCalculateMutation } from "../../store/services/endpoints/loanApi";
 
 import { useDispatch } from "react-redux";
 import { toggleAlert } from "../../store/features/alertSlice";
 import { setHightBorderSum } from "../../store/features/paymentSlice";
+import { useSelector } from "react-redux";
 
 import { handleError } from "../../errorTypeGuard";
 
@@ -15,9 +17,16 @@ import "./MainPage.scss";
 
 import PaymentChart from "../../chart/PaymentChart";
 import PaymentSchedule from "../../components/payment-schedule/PaymentSchedule";
+import { RootType } from "../../store";
 
 const MainPage: FC = () => {
   const dispatch = useDispatch();
+
+  const { hightBorderSum } = useSelector(
+    (state: RootType) => state.paymentSlice
+  );
+
+  const location = useLocation();
 
   const [triggerCalculate, { isError, isLoading, isSuccess, data, error }] =
     useCalculateMutation();
@@ -25,8 +34,6 @@ const MainPage: FC = () => {
   const [tableData, setTableData] = useState<IPayment[]>([]);
 
   const [monthSum, setMonthSum] = useState<string>("16 220.95 ₽");
-
-  // const [resultSum, setResultSum] = useState<number>(200000);
 
   const transformRate = (rate: string): number =>
     rate.split(" ").reduce<number>((acc, char, index, arr) => {
@@ -94,14 +101,6 @@ const MainPage: FC = () => {
       );
 
       dispatch(
-        toggleAlert({
-          isAlert: true,
-          isAuthAlert: false,
-          alertText: "Вы авторизовались!",
-        })
-      );
-
-      dispatch(
         setHightBorderSum(
           getHightSumBorder(responseData.payment.paymentDetails)
         )
@@ -110,8 +109,14 @@ const MainPage: FC = () => {
   }, [isSuccess, isError, error, data]);
 
   useEffect(() => {
-    triggerCalculate({ amount: 100000, interestRate: 13, termInMonth: 6 });
+    !hightBorderSum &&
+      triggerCalculate({ amount: 100000, interestRate: 13, termInMonth: 6 });
   }, []);
+
+  useEffect(() => {
+    if (location.pathname === "/")
+      triggerCalculate({ amount: 100000, interestRate: 13, termInMonth: 6 });
+  }, [location]);
 
   return (
     <main className="main-page">
@@ -138,7 +143,10 @@ const MainPage: FC = () => {
         setMonthSum={setMonthSum}
       />
       <PaymentChart chartData={data?.payment?.paymentDetails as IPayment[]} />
-      <PaymentSchedule tableData={tableData} />
+
+      <div>
+        <PaymentSchedule tableData={tableData} />
+      </div>
     </main>
   );
 };

@@ -27,6 +27,24 @@ const MakePayment: FC = () => {
 
     if (Number(paimentValue.replace(" ₽", "")) > hightBorderSum)
       setPaimentValue(`${hightBorderSum} ₽`);
+
+    if (
+      paimentValue.split("")[0] === "0" &&
+      paimentValue.length > 3 &&
+      paimentValue.split("")[1] === "0"
+    ) {
+      setPaimentValue("0 ₽");
+    }
+
+    if (
+      paimentValue.split("")[0] === "0" &&
+      paimentValue.length > 3 &&
+      paimentValue.split("")[1] !== "0"
+    ) {
+      setPaimentValue(
+        paimentValue.split("").slice(1, paimentValue.length).join("")
+      );
+    }
   };
 
   const handleLeave = (): void => {
@@ -70,6 +88,11 @@ const MakePayment: FC = () => {
   useEffect(() => {
     if (alertPaiment) return setAlertPayment(false);
   }, [paimentValue]);
+
+  useEffect(() => {
+    setPaimentValue("0 ₽");
+    setAlertPayment(false);
+  }, []);
 
   return (
     <div className={isPayment ? "make-payment visible" : "make-payment"}>

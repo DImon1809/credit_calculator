@@ -9,6 +9,10 @@ import { handleError } from "../../../errorTypeGuard";
 import FormInput from "../../UI/form-input/FormInput";
 import FormButton from "../../UI/form-button/FormButton";
 
+import agreementPdf from "../../../assets/agreement/agreement.pdf";
+
+import CheckBox from "../../UI/check-box/CheckBox";
+
 import "./RegisterForm.scss";
 
 import { IForms } from "../forms-wrapper/FormsWrapper";
@@ -26,13 +30,20 @@ const RegisterForm: FC<IForms> = ({ slideMove, changeSlideMove }) => {
 
   const [isOpenEye, setIsOpenEye] = useState<boolean>(false);
   const [pasType, setPasType] = useState<string>("password");
+  const [isCheck, setIsCheck] = useState<boolean>(false);
 
   const [alertEmail, setAlertEmail] = useState<boolean>(false);
   const [alertPassword, setAlertPassword] = useState<boolean>(false);
+  const [alertCheck, setAlertCheck] = useState<boolean>(false);
 
-  const setAlertsInput = (alEmail: boolean, alPass: boolean): void => {
+  const setAlertsInput = (
+    alEmail: boolean,
+    alPass: boolean,
+    alCheck: boolean
+  ): void => {
     setAlertEmail(alEmail);
     setAlertPassword(alPass);
+    setAlertCheck(alCheck);
   };
 
   const handleChangeEmail = (value: string): void => {
@@ -62,15 +73,16 @@ const RegisterForm: FC<IForms> = ({ slideMove, changeSlideMove }) => {
     setIsOpenEye(false);
     setPasType("password");
 
-    return setAlertsInput(false, false);
+    return setAlertsInput(false, false, false);
   };
 
   const handleRegister = () => {
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
 
-    if (!email.length || !password.length) {
+    if (!email.length || !password.length || !isCheck) {
       !email.length && setAlertEmail(true);
       !password.length && setAlertPassword(true);
+      !isCheck && setAlertCheck(true);
 
       dispatch(
         toggleAlert({
@@ -92,7 +104,7 @@ const RegisterForm: FC<IForms> = ({ slideMove, changeSlideMove }) => {
         })
       );
 
-      return setAlertsInput(true, false);
+      return setAlertsInput(true, false, false);
     }
 
     if (password.length < 6) {
@@ -104,7 +116,7 @@ const RegisterForm: FC<IForms> = ({ slideMove, changeSlideMove }) => {
         })
       );
 
-      return setAlertsInput(false, true);
+      return setAlertsInput(false, true, false);
     }
 
     !isLoading && triggerRegister({ email, password });
@@ -127,7 +139,7 @@ const RegisterForm: FC<IForms> = ({ slideMove, changeSlideMove }) => {
           })
         );
 
-        return setAlertsInput(true, true);
+        return setAlertsInput(true, true, true);
       }
 
       if (handleError(error)?.status === 400) {
@@ -142,27 +154,30 @@ const RegisterForm: FC<IForms> = ({ slideMove, changeSlideMove }) => {
     }
 
     if (!error && isSuccess) {
-      setEmail("");
-      setPassword("");
+      localStorage.setItem("email", email);
 
       dispatch(
         toggleAlert({
           isAlert: true,
           isAuthAlert: false,
-          alertText: "Пользователь уже существует!",
+          alertText: "Вы зарегистрировались!",
         })
       );
 
-      return setAlertsInput(false, false);
+      setEmail("");
+      setPassword("");
+
+      return setAlertsInput(false, false, false);
     }
   }, [error, isSuccess]);
 
   useEffect(() => {
-    if (alertEmail || alertPassword) {
+    if (alertEmail || alertPassword || alertCheck) {
       setAlertEmail(false);
       setAlertPassword(false);
+      setAlertCheck(false);
     }
-  }, [email, password]);
+  }, [email, password, isCheck]);
 
   return (
     <div className={`register-form-wrapper ${directionName}`}>
@@ -193,6 +208,27 @@ const RegisterForm: FC<IForms> = ({ slideMove, changeSlideMove }) => {
           handleEye={handleEye}
           setInputValue={handleChangePassword}
         />
+
+        <div className="police-wrapper">
+          <div className="police-title">
+            <p>
+              Подтверждаю{" "}
+              <a
+                href={agreementPdf}
+                download="document.pdf"
+                className="download-pdf"
+              >
+                пользовательские соглашения
+              </a>
+              и даю согласие на обработку персональных данных
+            </p>
+          </div>
+          <CheckBox
+            isAlert={alertCheck}
+            isCheck={isCheck}
+            setIsCheck={setIsCheck}
+          />
+        </div>
 
         <div className="buttons-wrapper">
           <FormButton

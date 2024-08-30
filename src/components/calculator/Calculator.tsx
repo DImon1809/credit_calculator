@@ -14,7 +14,7 @@ import { toggleAlert } from "../../store/features/alertSlice";
 import { RootType } from "../../store";
 import { useSelector } from "react-redux";
 
-import { useCalculateMutation } from "../../store/services/endpoints/loanApi";
+import { useLazySaveQuery } from "../../store/services/endpoints/loanApi";
 
 import RangeInput from "../UI/range-input/RangeInput";
 
@@ -39,6 +39,11 @@ const Calculator: FC<ICalculator> = ({
   setMonthSum,
 }) => {
   const dispatch = useDispatch();
+
+  const [
+    triggerSave,
+    { isError, isSuccess, data, isLoading: isSaving, error },
+  ] = useLazySaveQuery();
 
   const { isAuth } = useSelector((state: RootType) => state.userSlice);
 
@@ -66,6 +71,7 @@ const Calculator: FC<ICalculator> = ({
     }
 
     if (isAuth) {
+      triggerSave();
     }
   };
 
@@ -122,6 +128,12 @@ const Calculator: FC<ICalculator> = ({
   useEffect(() => {
     setAlertPercent(false);
   }, [percent]);
+
+  useEffect(() => {
+    if (isError) console.log(error);
+
+    if (isSaving) console.log(data);
+  }, [isError, isSaving, data]);
 
   return (
     <div className="calculator-wrapper">

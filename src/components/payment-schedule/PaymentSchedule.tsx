@@ -1,19 +1,54 @@
-import { FC } from "react";
-
+import { FC, useRef } from "react";
 import "./PaymentSchedule.scss";
-
-import { testData } from "../../testData";
-
 import { IPayment } from "../../store/services/types";
+
+import { useSelector } from "react-redux";
+import { RootType } from "../../store";
+
+import download from "../../assets/ui/download.webp";
+
+import html2pdf from "html2pdf.js";
+
+import DownloadButton from "../UI/download-button/DownloadButton";
 
 export interface IPaymentSchedule {
   tableData: IPayment[];
 }
 
 const PaymentSchedule: FC<IPaymentSchedule> = ({ tableData }) => {
+  const { isAuth } = useSelector((state: RootType) => state.userSlice);
+
+  const paramRef = useRef<HTMLTableElement>(null);
+
+  const handlePrintPdf = () => {
+    if (paramRef.current) {
+      const opt = {
+        margin: 10,
+        filename: "document.pdf",
+        image: { type: "jpeg", quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+        pagebreak: { mode: ["avoid-all", "css", "legacy"] },
+      };
+
+      html2pdf().set(opt).from(paramRef.current).save();
+    }
+  };
+
   return (
     <div className="payment-schedule">
-      <table className="table">
+      {isAuth ? (
+        <div className="download-wrapper">
+          <DownloadButton downloadButtonFn={handlePrintPdf} />
+        </div>
+      ) : (
+        ""
+      )}
+      <table
+        className={isAuth ? "table auth" : "table"}
+        id="table"
+        ref={paramRef}
+      >
         <thead className="thead">
           <tr>
             <td>Год/месяц</td>
@@ -36,7 +71,9 @@ const PaymentSchedule: FC<IPaymentSchedule> = ({ tableData }) => {
               </tr>
             ))
           ) : (
-            <tr></tr>
+            <tr>
+              <td>Данных пока нет</td>
+            </tr>
           )}
         </tbody>
       </table>

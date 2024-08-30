@@ -16,7 +16,11 @@ const PersonalAccount: FC = () => {
       {isAuth ? (
         <div className="my-credits">
           <div className="my-credits-header">
-            <h3>Личный кабинет</h3>
+            <div>
+              <h3>Личный кабинет</h3>
+            </div>
+
+            <p className="user-name">{localStorage.getItem("email") || ""}</p>
           </div>
 
           <div className="my-credits-body">

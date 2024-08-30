@@ -22,7 +22,7 @@ const tokenKey = "token";
 const AuthForm: FC<IForms> = ({ slideMove, changeSlideMove }) => {
   const dispatch = useDispatch();
 
-  const [triggerLogin, { isLoading, isError, error, isSuccess }] =
+  const [triggerLogin, { isLoading, isError, error, data, isSuccess }] =
     useLoginMutation();
 
   const [directionName, setDiractionName] = useState<string>("");
@@ -96,7 +96,7 @@ const AuthForm: FC<IForms> = ({ slideMove, changeSlideMove }) => {
   }, [slideMove]);
 
   useEffect(() => {
-    if (error && !isSuccess) {
+    if (isError) {
       if (handleError(error)?.status === 401) {
         dispatch(
           toggleAlert({
@@ -110,7 +110,9 @@ const AuthForm: FC<IForms> = ({ slideMove, changeSlideMove }) => {
       }
     }
 
-    if (!error && isSuccess) {
+    if (isLoading) {
+      localStorage.setItem("email", email);
+
       dispatch(
         toggleAlert({
           isAlert: true,
@@ -121,8 +123,10 @@ const AuthForm: FC<IForms> = ({ slideMove, changeSlideMove }) => {
 
       setEmail("");
       setPassword("");
+
+      return setAlertsInput(false, false);
     }
-  }, [isSuccess, isError, error]);
+  }, [isLoading, isError]);
 
   useEffect(() => {
     if (alertEmail || alertPassword) setAlertsInput(false, false);

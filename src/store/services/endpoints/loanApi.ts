@@ -26,28 +26,29 @@ export const loanApi = serviceApi.injectEndpoints({
       }),
     }),
 
-    save: builder.mutation<
+    save: builder.query<
       any,
-      {
-        amount: number;
-        interestRate: number;
-        termInMonth: number;
-      }
+      // {
+      //   amount: number;
+      //   interestRate: number;
+      //   termInMonth: number;
+      // }
+      void
     >({
       query: (loan) => ({
-        url: "/team21/api/v1/loan/save",
-        method: "post",
+        url: "/team21/api/v1/loan/save/0",
+        method: "get",
         headers: {
           "Content-Type": "application/json",
         },
-        body: {
-          amount: loan.amount,
-          interestRate: loan.interestRate,
-          termInMonth: loan.termInMonth,
-        },
+        // body: {
+        //   amount: loan.amount,
+        //   interestRate: loan.interestRate,
+        //   termInMonth: loan.termInMonth,
+        // },
       }),
     }),
   }),
 });
 
-export const { useCalculateMutation, useSaveMutation } = loanApi;
+export const { useCalculateMutation, useLazySaveQuery } = loanApi;
