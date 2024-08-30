@@ -14,6 +14,7 @@ import FormInput from "../../UI/form-input/FormInput";
 import FormButton from "../../UI/form-button/FormButton";
 
 import "./AuthForm.scss";
+import { cardData } from "../../../testData";
 
 import { IForms } from "../forms-wrapper/FormsWrapper";
 
@@ -112,6 +113,7 @@ const AuthForm: FC<IForms> = ({ slideMove, changeSlideMove }) => {
 
     if (isLoading) {
       localStorage.setItem("email", email);
+      localStorage.setItem("cards", JSON.stringify(cardData));
 
       dispatch(
         toggleAlert({

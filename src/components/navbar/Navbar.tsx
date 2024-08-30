@@ -67,6 +67,7 @@ const Navbar: FC = () => {
   const handleLogOut = (): void => {
     localStorage.removeItem("token");
     localStorage.removeItem("email");
+    localStorage.removeItem("cards");
 
     dispatch(logout());
     dispatch(

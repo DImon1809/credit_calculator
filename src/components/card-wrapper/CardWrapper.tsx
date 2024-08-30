@@ -4,23 +4,23 @@ import Card from "../card/Card";
 
 import "./CardWrapper.scss";
 
-const cards = [
+const cardData = [
   {
     count: 1,
     amount: 4000000,
-    termInMonth: 2,
+    termInMonth: 5,
     monthlyPayment: 12,
   },
 
-  { count: 2, amount: 4000000, termInMonth: 2, monthlyPayment: 12 },
+  { count: 2, amount: 10000, termInMonth: 73, monthlyPayment: 18 },
 
-  { count: 3, amount: 4000000, termInMonth: 2, monthlyPayment: 12 },
+  { count: 3, amount: 50000, termInMonth: 23, monthlyPayment: 10 },
 
-  { count: 4, amount: 4000000, termInMonth: 2, monthlyPayment: 12 },
+  { count: 4, amount: 850000, termInMonth: 7, monthlyPayment: 5 },
 
-  { count: 5, amount: 4000000, termInMonth: 2, monthlyPayment: 12 },
+  { count: 5, amount: 40000, termInMonth: 5, monthlyPayment: 8 },
 
-  { count: 6, amount: 4000000, termInMonth: 2, monthlyPayment: 12 },
+  { count: 6, amount: 320000, termInMonth: 12, monthlyPayment: 5 },
 
   // { count: 7, amount: 4000000, termInMonth: 2, monthlyPayment: 12 },
 
@@ -29,6 +29,8 @@ const cards = [
 
 const CardWrapper: FC = () => {
   const [smallSize, setSmallSize] = useState<boolean>(false);
+
+  const [cards, setCards] = useState<any[]>([]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -46,10 +48,14 @@ const CardWrapper: FC = () => {
     };
   }, []);
 
+  // useEffect(() => {
+  //   setCards(JSON.parse(localStorage.getItem("cards") || "") ?? []);
+  // }, []);
+
   return (
     <div className={cards.length > 6 ? "card-wrapper long" : "card-wrapper"}>
       <div className="card-wrapper-left">
-        {cards.map((card, index) => {
+        {cardData.map((card, index) => {
           if (index % 2 === 0) {
             return (
               <Card
@@ -87,7 +93,7 @@ const CardWrapper: FC = () => {
       </div>
       <div className="card-wrapper-right">
         {!smallSize &&
-          cards.map((card, index) => {
+          cardData.map((card, index) => {
             if (index % 2 !== 0) {
               return (
                 <Card

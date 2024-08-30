@@ -17,6 +17,8 @@ import "./RegisterForm.scss";
 
 import { IForms } from "../forms-wrapper/FormsWrapper";
 
+import { cardData } from "../../../testData";
+
 const RegisterForm: FC<IForms> = ({ slideMove, changeSlideMove }) => {
   const dispatch = useDispatch();
 
@@ -158,6 +160,7 @@ const RegisterForm: FC<IForms> = ({ slideMove, changeSlideMove }) => {
 
     if (isLoading && !error) {
       localStorage.setItem("email", email);
+      localStorage.setItem("cards", JSON.stringify(cardData));
 
       dispatch(
         toggleAlert({

@@ -54,3 +54,22 @@ export const testData: {
     repayment: "3 000 000 ₽",
   },
 ];
+
+export const cardData = [
+  {
+    count: 1,
+    amount: 4000000,
+    termInMonth: 5,
+    monthlyPayment: 12,
+  },
+
+  { count: 2, amount: 10000, termInMonth: 73, monthlyPayment: 18 },
+
+  { count: 3, amount: 50000, termInMonth: 23, monthlyPayment: 10 },
+
+  { count: 4, amount: 850000, termInMonth: 7, monthlyPayment: 5 },
+
+  { count: 5, amount: 40000, termInMonth: 5, monthlyPayment: 8 },
+
+  { count: 6, amount: 320000, termInMonth: 12, monthlyPayment: 5 },
+];
