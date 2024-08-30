@@ -17,8 +17,6 @@ import "./AuthForm.scss";
 
 import { IForms } from "../forms-wrapper/FormsWrapper";
 
-const tokenKey = "token";
-
 const AuthForm: FC<IForms> = ({ slideMove, changeSlideMove }) => {
   const dispatch = useDispatch();
 
@@ -109,6 +107,8 @@ const AuthForm: FC<IForms> = ({ slideMove, changeSlideMove }) => {
         setAlertsInput(true, true);
       }
     }
+
+    console.log(error);
 
     if (isLoading) {
       localStorage.setItem("email", email);

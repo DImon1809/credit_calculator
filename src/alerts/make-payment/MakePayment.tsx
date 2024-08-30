@@ -41,8 +41,17 @@ const MakePayment: FC = () => {
       paimentValue.length > 3 &&
       paimentValue.split("")[1] !== "0"
     ) {
+      let payment = Number(
+        paimentValue
+          .split("")
+          .slice(1, paimentValue.length - 2)
+          .join("")
+      );
+
       setPaimentValue(
-        paimentValue.split("").slice(1, paimentValue.length).join("")
+        payment > hightBorderSum
+          ? hightBorderSum + " ₽"
+          : paimentValue.split("").slice(1, paimentValue.length).join("")
       );
     }
   };

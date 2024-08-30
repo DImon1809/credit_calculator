@@ -1,6 +1,6 @@
 import { FC, MouseEvent, useEffect, useState, useRef, memo } from "react";
 
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useCalculateMutation } from "../../store/services/endpoints/loanApi";
 
 import { useDispatch } from "react-redux";
@@ -47,8 +47,10 @@ const MainPage: FC = () => {
     }, 0);
 
   const getHightSumBorder = (payments: IPayment[]): number =>
-    payments.reduce<number>((acc, prev) => (acc += prev.interest), 0) +
-    payments[0].paymentAmount;
+    Math.floor(
+      payments.reduce<number>((acc, prev) => (acc += prev.interest), 0) +
+        payments[0].paymentAmount
+    );
 
   const handleCalculate = (
     event: MouseEvent<HTMLDivElement>,

@@ -50,13 +50,30 @@ const RangeInput: FC<IRangeInput> = ({
 
   const handleBlur = (isSum: boolean) => {
     if (!isSum) {
-      let _current = Number(
-        externalValue.replace(" мес.", "").split(" ").join("")
-      );
+      let _current: number;
 
-      _current < 6
+      if (externalValue.match(/[годлт]/gi)) {
+        let res = 0;
+        let chars = externalValue.split(" ");
+
+        for (let i = 0; i < chars.length; i++) {
+          if (chars[i] === "год" || chars[i] === "года" || chars[i] === "лет") {
+            res += +chars[i - 1] * 12;
+          }
+
+          if (chars[i] === "месяцев") res += +chars[i - 1];
+        }
+
+        _current = res;
+      } else {
+        _current = Number(
+          externalValue.replace(" мес.", "").split(" ").join("")
+        );
+      }
+
+      _current! < 6
         ? setExternalValue("6 месяцев")
-        : setExternalValue(`${_current} месяцев`);
+        : setExternalValue(`${_current!} месяцев`);
     }
 
     if (isSum) {

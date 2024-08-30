@@ -20,7 +20,7 @@ import { IForms } from "../forms-wrapper/FormsWrapper";
 const RegisterForm: FC<IForms> = ({ slideMove, changeSlideMove }) => {
   const dispatch = useDispatch();
 
-  const [triggerRegister, { error, isSuccess, isLoading }] =
+  const [triggerRegister, { isError, isLoading, isSuccess, error }] =
     useRegisterMutation();
 
   const [directionName, setDiractionName] = useState<string>("");
@@ -119,7 +119,8 @@ const RegisterForm: FC<IForms> = ({ slideMove, changeSlideMove }) => {
       return setAlertsInput(false, true, false);
     }
 
-    !isLoading && triggerRegister({ email, password });
+    // !isLoading && triggerRegister({ email, password });
+    triggerRegister({ email, password });
   };
 
   useEffect(() => {
@@ -129,47 +130,50 @@ const RegisterForm: FC<IForms> = ({ slideMove, changeSlideMove }) => {
   }, [slideMove]);
 
   useEffect(() => {
-    if (error && !isSuccess) {
+    if (isError && error) {
       if (handleError(error)?.status === 409) {
         dispatch(
           toggleAlert({
             isAlert: true,
-            isAuthAlert: false,
             alertText: "Пользователь уже существует!",
+            isAuthAlert: false,
           })
         );
 
-        return setAlertsInput(true, true, true);
+        return setAlertsInput(true, true, false);
       }
 
       if (handleError(error)?.status === 400) {
         dispatch(
           toggleAlert({
             isAlert: true,
-            isAuthAlert: false,
             alertText: "Что-то пошло не так!",
+            isAuthAlert: false,
           })
         );
       }
+
+      return;
     }
 
-    if (!error && isSuccess) {
+    if (isLoading && !error) {
       localStorage.setItem("email", email);
 
       dispatch(
         toggleAlert({
           isAlert: true,
-          isAuthAlert: false,
           alertText: "Вы зарегистрировались!",
+          isAuthAlert: false,
         })
       );
 
       setEmail("");
       setPassword("");
+      setIsCheck(false);
 
       return setAlertsInput(false, false, false);
     }
-  }, [error, isSuccess]);
+  }, [isLoading, isError, error]);
 
   useEffect(() => {
     if (alertEmail || alertPassword || alertCheck) {
@@ -232,7 +236,7 @@ const RegisterForm: FC<IForms> = ({ slideMove, changeSlideMove }) => {
 
         <div className="buttons-wrapper">
           <FormButton
-            isLoading={isLoading}
+            isLoading={false}
             buttonText="зарегистрироваться"
             functionButton={handleRegister}
           />
