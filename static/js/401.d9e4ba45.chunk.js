@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunkclient=self.webpackChunkclient||[]).push([[401],{401:(e,s,t)=>{t.r(s),t.d(s,{default:()=>i});var c=t(579);const i=()=>(0,c.jsxs)("section",{className:"for-developer",children:[(0,c.jsx)("h2",{children:"\u0414\u043b\u044f \u0440\u0430\u0437\u0440\u0430\u0431\u043e\u0442\u0447\u0438\u043a\u043e\u0432"}),(0,c.jsx)("iframe",{title:"gitbook",src:"https://shanty.gitbook.io/credit-tracker"})]})}}]);
-//# sourceMappingURL=401.d9e4ba45.chunk.js.map
